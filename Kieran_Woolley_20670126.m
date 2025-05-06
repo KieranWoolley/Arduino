@@ -51,6 +51,53 @@ ylabel('Temperature (Degrees Celcius)');
 title('Temperature over time');
 
 %%
+% d)
+disp('CABIN TEMPERATURE LOG');
+
+fprintf('Location: %s\n', 'Nottingham'); 
+fprintf('Date: %s\n\n', datestr(now, '06/05/2025')); % Shows the date
+fprintf('Minute\tTemperature (°C)\n');
+fprintf('------\t---------------\n');
+
+% Display data every minute (60 seconds)
+for minute = 0:9 % For 10 minutes (600 seconds)
+    time_index = minute * 60 + 1; % Convert minutes to 1-second index
+    if time_index <= duration % ends the for loop when time limit exceeds 600 seconds
+        fprintf('%d\t\t%.2f\n', minute, temperature(time_index));
+    end
+end
+
+fprintf('\nStatistics:\n');
+fprintf('Maximum temperature: %.2f °C\n', highest_temp);
+fprintf('Minimum temperature: %.2f °C\n', lowest_temp);
+fprintf('Average temperature: %.2f °C\n\n', average_temp);
+
+%%
+% e)
+clc
+fileID = fopen('cabin_temperature.txt', 'w');
+% This creates a new file with the same formatting as part d)
+fprintf(fileID, 'CABIN TEMPERATURE LOG\n');
+fprintf(fileID, 'Location: %s\n', 'Nottingham'); 
+fprintf(fileID, 'Date: %s\n\n', datestr(now, '06/05/2025')); 
+fprintf(fileID, 'Minute\tTemperature (°C)\n');
+fprintf(fileID, '------\t---------------\n');
+
+% Write data every minute (60 seconds)
+for minute = 0:9 % For 10 minutes (600 seconds)
+    time_index = minute * 60 + 1; % Convert minutes to 1-second index
+    if time_index <= duration
+        fprintf(fileID, '%d\t\t%.2f\n', minute, temperature(time_index));
+    end
+end
+
+fprintf(fileID, '\nStatistics:\n');
+fprintf(fileID, 'Maximum temperature: %.2f °C\n', highest_temp);
+fprintf(fileID, 'Minimum temperature: %.2f °C\n', lowest_temp);
+fprintf(fileID, 'Average temperature: %.2f °C\n', average_temp);
+
+fclose(fileID);
+
 
 
     
