@@ -98,6 +98,18 @@ fprintf(fileID, 'Average temperature: %.2f °C\n', average_temp);
 
 fclose(fileID);
 
+%% TASK - 2 LED TEMPERATURE MONITORING DEVICE IMPLEMENTATION [25 MARKS]
+clear
+% a) assemble the arduino and breadboard
+
+% b) create a flow chart for the task
+a = arduino('COM5', 'Uno');
+
+temp_monitor(a);
+
+doc temp_monitor
+
+%%
 
 
     
