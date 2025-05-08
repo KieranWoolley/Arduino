@@ -99,17 +99,37 @@ fprintf(fileID, 'Average temperature: %.2f °C\n', average_temp);
 fclose(fileID);
 
 %% TASK - 2 LED TEMPERATURE MONITORING DEVICE IMPLEMENTATION [25 MARKS]
-clear
+
 % a) assemble the arduino and breadboard
 
 % b) create a flow chart for the task
-a = arduino('COM5', 'Uno');
 
-temp_monitor(a);
+temp_monitor(a)
 
+ % this creates a link to the temp_monitor file
 doc temp_monitor
+%doc temp_monitor % shows comments made in the function
 
-%%
+%% - TASK - 3 ALGORITHMS – TEMPERATURE PREDICTION [25 MARKS]
+clear
+% a) Draw flow chart
 
+% b) create the temp_prediction file
 
+temp_prediction(a)
+
+doc temp_prediction
+
+%% TASK 4 - REFLECTIVE STATEMENT
+
+% One of the main challanges I face was making sure the breadboard circuit
+% was correct as it was something I was very unfamiliar with beforehand.
+% When my code was not working, I wasn't sure whether it was the code or my
+% circuit that was causing the problem. Furthermore, I found it very
+% challanging to use github and upload my code throughout the project. This
+% is something that I will definitely find a lot easier in future projects.
+% One of the main problems i faced when running my code was getting
+% accurate temperature values. This may be because my resistor
+% configuration was incorrect. I kept getting really extreme values, but
+% after tweaking my circuit my values started to become more accurate.
     
