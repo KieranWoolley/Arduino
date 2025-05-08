@@ -58,11 +58,11 @@ while toc(startTime) < duration
     currentTemp = (voltage - 0.5)/0.01; % Temperature conversion using 
     % coefficients
     
-    % Update buffers
+    % Update  the buffer
     tempBuffer = [tempBuffer(2:end), currentTemp];
     timeBuffer = [timeBuffer(2:end), now*86400]; % Converts to seconds
     
-    % Calculate rate of change PER SECOND
+    % Calculate rate of change per second
     if sum(~isnan(tempBuffer)) > 1
         validIdx = ~isnan(tempBuffer);
         ratePerSecond = (tempBuffer(end) - tempBuffer(find(validIdx,1))) / ...
@@ -89,7 +89,7 @@ while toc(startTime) < duration
         writeDigitalPin(a, redLED, 0);
     end
     
-    % Display status with per-second rate
+    % Displays the status
     fprintf('Current: %.2f°C | ', currentTemp);
     fprintf('Rate: %.4f°C/s | ', ratePerSecond);
     fprintf('Predicted in 5min: %.2f°C | ', predictedTemp);
