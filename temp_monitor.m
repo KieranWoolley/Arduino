@@ -1,85 +1,68 @@
-% TASK 2 - LED TEMPERATURE MONITORING DEVICE IMPLEMENTATION [25 MARKS]
+% The temp_monitor function is used to create a live graph of temperature
+% readings taken every second over a 10 minute time period. The function
+% also uses green, red, and yellow to indicate temperature readings. If the
+% temperature is between 18 and 24 degrees then the green LED will turn on.
+% If the temperature is above 24 degrees than the red LED will flash at
+% 0.25 second intervals. If the the temperature is below 18 degrees than
+% the yellow LED will flash at 0.5 second intervals.
 
-% g) 
 
-
-% c)
 function temp_monitor(a)
-
-% Data carried over
-duration = 600;
-t = zeros(1, duration)
-V0 = 0.5;
-Tc = 0.01
-Temperature = zeros(1, duration)
-% TERM_MONITOR_M - Real-time temperature monitoring with LED indicators
-%   Controls 3 LEDs based on temperature ranges and displays live plot
-% Inputs:
-%   a - Connected Arduino object
-% LED Behavior:
-%   18-24°C: Green LED steady on
-%   <18°C:   Yellow LED blinks (0.5s interval)
-%   >24°C:   Red LED blinks (0.25s interval)
-
-% Pin configuration
-greenLED = 'D4';
-yellowLED = 'D5';
-redLED = 'D6';
-thermistor = 'A1';
-
-% Initialize LEDs
-writeDigitalPin(a, greenLED, 0);
-wrtieDigitalPin(a, yellowLED, 0);
-writeDigitalPin(a, redLED, 0);
-
-% Plotting the live graph
-while true
-    Tgraph = plot(t, Temperature, '-0');
-    xlabel('Time (S)');
-    ylabel('Temperature (C)');
-    xlim([1, duration])
-    ylim([1, 30])
-    title('Live temperature graph');
+    a = arduino("COM5", "Uno")
+    duration = 600;
+    tempReadings = [];  % Creates an array to store temperature values
+    timeStamps = [];   % Creates an array to store time values
+    % Create figure for plotting
+    figure;
+    hPlot = plot(NaN, NaN); % Create empty plot
+    xlabel('Time (seconds)');
+    ylabel('Temperature (°C)');
+    title('Real-time Temperature Monitoring');
     grid on;
-    drawnow;
-end
-for n = 1:duration
-    t(n) = n;
-    voltage = readVoltage(a, 'A1');
-    Temperature(n) = (voltage - V0) / Tc;
-    set(Tgraph, 'YData', Temperature, 'XData', t)
-    drawnow;
-end
-
-for n = 1:duration
-    t(n) = n;
-    voltage = readVoltage(a 'A1');
-    Temperature(n) = (voltage - V0) / Tc;
-    set(Tgraph, 'YData', Temperature, 'XData', t)
-    drawnow;
-    % Yellow
-    if Temperature < 18 % lower than 18 degrees Celsius
-        writeDigitalPin(a, greenLED, 0)
-        writeDigitalPin(a, redLED, 0)
-        writeDigitalPin(a, yellowLED, 1)
-        pause(0.5) % light flashes at 0.5 second intervals
-        writeDigitalPin(a, yellowLED, 0)
-        pause(0.5)
-    % Red
-    elseif Temperature > 24 % above 24 degrees Celsius
-        writeDigitalPin(a, greenLED, 0)
-        writeDigitalPin(a, redLED, 1)
-        writeDigitalPin(a, yellowLED, 0)
-        pause(0.25) % light flashes at 0.25 second intervals
-        writeDigitalPin(a, redLED, 0)
-        pause(0.25)
-    % Green
-    else % else the green light will turn on for 1 second
-        writeDigitalPin(a, greenLED, 1)
-        writeDigitalPin(a, redLED, 0)
-        writeDigitalPin(a, yellowLED, 0)
-        pause(1) 
+    hold on;
+    for i = 1:duration
+        Temperate = (readVoltage(a, "A0") - 0.5) / 0.01;
+        disp(Temperate);
+        % Store temperature and timestamp
+        tempReadings(end+1) = Temperate;
+        timeStamps(end+1) = i;  % 
+        % Update plot
+        set(hPlot, 'XData', timeStamps, 'YData', tempReadings);
+        xlim([0 max(10, i)]);  % Adjust x-axis as time progresses
+        ylim([min(tempReadings)-2 max(tempReadings)+2]);
+        % Auto-scale y-axis using the highest temp reading as the max y
+        % value
+        drawnow; % This forces MATLAB to update the plot
+        % Your existing control logic remains unchanged
+        if Temperate > 24
+            %red flash 0.25
+            % all other LED's turned off and red flashes at 0.25 second
+            % intervals
+            writeDigitalPin(a ,"D5", 0)
+            writeDigitalPin(a ,"D4", 0)
+            writeDigitalPin(a ,"D6", 1)
+            pause(0.25)
+            writeDigitalPin(a ,"D6", 0)
+            pause(0.25)
+            disp("red")
+        elseif Temperate >= 18 && Temperate <= 24
+            %green solid
+            % all other LED's turned offf and green LED is turned on
+            writeDigitalPin(a ,"D4", 0)
+            writeDigitalPin(a ,"D6", 0)
+            writeDigitalPin(a, "D5", 1)
+            disp("green")
+        else
+            %yellow flash 0.50
+            % All other LED's turned of and yellow flashes at 0.5 second
+            % intervals
+            writeDigitalPin(a ,"D5", 0)
+            writeDigitalPin(a ,"D6", 0)
+            writeDigitalPin(a ,"D4", 1)
+            pause(0.50)
+            writeDigitalPin(a ,"D4", 0)
+            pause(0.50)
+            disp("yellow")
+        end
     end
-    pause(1)
-
-
+end
