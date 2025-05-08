@@ -61,7 +61,7 @@ fprintf('------\t---------------\n');
 
 % Display data every minute (60 seconds)
 for minute = 0:9 % For 10 minutes (600 seconds)
-    time_index = minute * 60 + 1; % Convert minutes to 1-second index
+    time_index = minute * 60 + 1; % Convert minutes to second 
     if time_index <= duration % ends the for loop when time limit exceeds 600 seconds
         fprintf('%d\t\t%.2f\n', minute, temperature(time_index));
     end
